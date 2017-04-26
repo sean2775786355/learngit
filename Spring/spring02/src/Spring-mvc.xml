@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans.xsd  
+            http://www.springframework.org/schema/mvc  
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+            http://www.springframework.org/schema/context  
+            http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<!-- 	
+		该标签作用是识别类中的注解，但是该功能现在已经被扫描包标签（context:component-scan）
+		所包含，所以此条可以忽略
+	 -->
+	<context:annotation-config />
+	
+	<!-- 添加注解驱动 -->
+	<mvc:annotation-driven />
+	
+	<!--
+		spring会用默认的Servlet来响应静态文件， (DefaultServletHttpRequestHandler在容器启动是
+		会使用主流web容器默认servlet的名称列表自动查找容器的默认servlet， 包括Tomcat, Jetty, 
+		Glassfish, JBoss, Resin, WebLogic, and WebSphere。)
+	 -->  
+	<mvc:default-servlet-handler/>
+	
+	<!-- 默认扫描的包路径  -->
+	<context:component-scan base-package="com.controller" />
+	
+	<!-- @RequestMapping 注解配置 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html; charset=UTF-8</value>
+							<value>application/json;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!--配置返回视图的路径 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 页面上添加了jstl标签 -->
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<!-- 配置jsp路径前缀 -->
+		<property name="prefix" value="/WEB-INF" />
+		<!-- 配置URl后缀 -->
+        <property name="suffix" value=".jsp" /> 
+	</bean>
+	
+	</beans>
